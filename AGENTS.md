@@ -13,12 +13,12 @@ Any agent working in this repository must treat those documents as binding produ
 Before proposing, planning, or implementing any government-related change, read these files in order:
 
 1. [`docs/README.md`](docs/README.md)
-2. [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md)
-3. [`docs/specs/democracy-v1-spec.md`](docs/specs/democracy-v1-spec.md)
-4. [`docs/specs/democracy-v1-implementation-breakdown.md`](docs/specs/democracy-v1-implementation-breakdown.md)
-5. [`docs/reference/democracy-v1-data-contracts.md`](docs/reference/democracy-v1-data-contracts.md)
-6. [`docs/reference/democracy-v1-balancing-reference.md`](docs/reference/democracy-v1-balancing-reference.md)
-7. [`docs/reference/government-ui-content-map.md`](docs/reference/government-ui-content-map.md)
+2. [`docs/specs/democracy-v1-spec.md`](docs/specs/democracy-v1-spec.md)
+3. [`docs/specs/democracy-v1-implementation-breakdown.md`](docs/specs/democracy-v1-implementation-breakdown.md)
+4. [`docs/reference/democracy-v1-data-contracts.md`](docs/reference/democracy-v1-data-contracts.md)
+5. [`docs/reference/democracy-v1-balancing-reference.md`](docs/reference/democracy-v1-balancing-reference.md)
+6. [`docs/reference/government-ui-content-map.md`](docs/reference/government-ui-content-map.md)
+7. [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md)
 
 If the task is unrelated to the government system, only read the files needed for that task.
 
