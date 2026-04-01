@@ -1,0 +1,59 @@
+name: Spec Alignment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  check-spec-alignment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify docs changed when implementation changed
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git fetch origin "${{ github.event.pull_request.base.ref }}" --depth=1
+
+          base_ref="origin/${{ github.event.pull_request.base.ref }}"
+          mapfile -t changed_files < <(git diff --name-only "$base_ref"...HEAD)
+
+          echo "Changed files:"
+          printf ' - %s\n' "${changed_files[@]}"
+
+          has_impl_change=0
+          has_doc_change=0
+
+          for file in "${changed_files[@]}"; do
+            case "$file" in
+              docs/*|AGENTS.md|.github/*)
+                :
+                ;;
+              *.cs|*.csproj|*.json|*.xml|*.tsx|*.ts|*.jsx|*.js|*.css|*.scss|*.uxml|*.uss)
+                has_impl_change=1
+                ;;
+            esac
+
+            case "$file" in
+              docs/README.md|docs/roadmap/*|docs/specs/*|docs/reference/*)
+                has_doc_change=1
+                ;;
+            esac
+          done
+
+          echo "Implementation change detected: $has_impl_change"
+          echo "Spec/reference doc change detected: $has_doc_change"
+
+          if [[ "$has_impl_change" -eq 1 && "$has_doc_change" -ne 1 ]]; then
+            echo "Government-related implementation files changed without any roadmap/spec/reference doc updates."
+            echo "Update the relevant files under docs/specs, docs/reference, docs/roadmap, or docs/README.md."
+            exit 1
+          fi
+
+          echo "Spec alignment check passed."
