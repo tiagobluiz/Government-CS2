@@ -4,7 +4,7 @@
 
 This repository is building a Cities: Skylines II mod that introduces a government layer.
 
-The current implementation source of truth is the documentation package under [`docs`](C:\dev\Government-CS2\docs), especially the Democracy V1 documents.
+The current implementation source of truth is the documentation package under [`docs`](docs), especially the Democracy V1 documents.
 
 Any agent working in this repository must treat those documents as binding product and implementation guidance, not as optional background reading.
 
@@ -12,13 +12,13 @@ Any agent working in this repository must treat those documents as binding produ
 
 Before proposing, planning, or implementing any government-related change, read these files in order:
 
-1. [`docs/README.md`](C:\dev\Government-CS2\docs\README.md)
-2. [`docs/roadmap/government-system-roadmap.md`](C:\dev\Government-CS2\docs\roadmap\government-system-roadmap.md)
-3. [`docs/specs/democracy-v1-spec.md`](C:\dev\Government-CS2\docs\specs\democracy-v1-spec.md)
-4. [`docs/specs/democracy-v1-implementation-breakdown.md`](C:\dev\Government-CS2\docs\specs\democracy-v1-implementation-breakdown.md)
-5. [`docs/reference/democracy-v1-data-contracts.md`](C:\dev\Government-CS2\docs\reference\democracy-v1-data-contracts.md)
-6. [`docs/reference/democracy-v1-balancing-reference.md`](C:\dev\Government-CS2\docs\reference\democracy-v1-balancing-reference.md)
-7. [`docs/reference/government-ui-content-map.md`](C:\dev\Government-CS2\docs\reference\government-ui-content-map.md)
+1. [`docs/README.md`](docs/README.md)
+2. [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md)
+3. [`docs/specs/democracy-v1-spec.md`](docs/specs/democracy-v1-spec.md)
+4. [`docs/specs/democracy-v1-implementation-breakdown.md`](docs/specs/democracy-v1-implementation-breakdown.md)
+5. [`docs/reference/democracy-v1-data-contracts.md`](docs/reference/democracy-v1-data-contracts.md)
+6. [`docs/reference/democracy-v1-balancing-reference.md`](docs/reference/democracy-v1-balancing-reference.md)
+7. [`docs/reference/government-ui-content-map.md`](docs/reference/government-ui-content-map.md)
 
 If the task is unrelated to the government system, only read the files needed for that task.
 
@@ -26,11 +26,11 @@ If the task is unrelated to the government system, only read the files needed fo
 
 When documents overlap, use this precedence order:
 
-1. [`docs/specs/democracy-v1-spec.md`](C:\dev\Government-CS2\docs\specs\democracy-v1-spec.md)
-2. [`docs/specs/democracy-v1-implementation-breakdown.md`](C:\dev\Government-CS2\docs\specs\democracy-v1-implementation-breakdown.md)
-3. [`docs/reference/*`](C:\dev\Government-CS2\docs\reference)
-4. [`docs/roadmap/government-system-roadmap.md`](C:\dev\Government-CS2\docs\roadmap\government-system-roadmap.md)
-5. [`docs/investigation/*`](C:\dev\Government-CS2\docs\investigation)
+1. [`docs/specs/democracy-v1-spec.md`](docs/specs/democracy-v1-spec.md)
+2. [`docs/specs/democracy-v1-implementation-breakdown.md`](docs/specs/democracy-v1-implementation-breakdown.md)
+3. [`docs/reference/*`](docs/reference)
+4. [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md)
+5. [`docs/investigation/*`](docs/investigation)
 
 Use the investigation files for background and rationale, not to override the spec.
 
@@ -68,11 +68,11 @@ For government-related implementation work:
 
 When code changes affect government behavior, the agent must check whether one or more of these files also need updates:
 
-- [`docs/specs/democracy-v1-spec.md`](C:\dev\Government-CS2\docs\specs\democracy-v1-spec.md)
-- [`docs/specs/democracy-v1-implementation-breakdown.md`](C:\dev\Government-CS2\docs\specs\democracy-v1-implementation-breakdown.md)
-- [`docs/reference/democracy-v1-data-contracts.md`](C:\dev\Government-CS2\docs\reference\democracy-v1-data-contracts.md)
-- [`docs/reference/democracy-v1-balancing-reference.md`](C:\dev\Government-CS2\docs\reference\democracy-v1-balancing-reference.md)
-- [`docs/reference/government-ui-content-map.md`](C:\dev\Government-CS2\docs\reference\government-ui-content-map.md)
+- [`docs/specs/democracy-v1-spec.md`](docs/specs/democracy-v1-spec.md)
+- [`docs/specs/democracy-v1-implementation-breakdown.md`](docs/specs/democracy-v1-implementation-breakdown.md)
+- [`docs/reference/democracy-v1-data-contracts.md`](docs/reference/democracy-v1-data-contracts.md)
+- [`docs/reference/democracy-v1-balancing-reference.md`](docs/reference/democracy-v1-balancing-reference.md)
+- [`docs/reference/government-ui-content-map.md`](docs/reference/government-ui-content-map.md)
 
 If behavior changed and docs were not updated, the agent must explain why no doc update was necessary.
 

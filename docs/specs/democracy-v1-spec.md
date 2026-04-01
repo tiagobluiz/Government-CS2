@@ -1283,7 +1283,7 @@ Debug delivery:
 
 ## Acceptance Criteria
 
-Democracy V1 is acceptable when all of the following are true.
+Democracy V1 is acceptable when all the following are true.
 
 ### Initialization and persistence
 

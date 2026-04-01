@@ -216,6 +216,8 @@ Costs:
 
 ## Suggested gameplay variables
 
+Note: these variables are exploratory and are not part of Democracy V1 unless they are explicitly promoted into [`docs/specs/*`](../specs). For current approved vocabulary and scope, treat the files under [`docs/specs`](../specs) as authoritative.
+
 Across all four systems, the same city could track:
 
 - legitimacy

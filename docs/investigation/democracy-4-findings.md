@@ -170,6 +170,12 @@ Best translated gameplay:
 
 ## Recommended design takeaway for our CS2 mod
 
+### V1 scope guardrail
+
+This section is architecture guidance beyond Democracy V1, not the implementation source of truth for V1.
+
+For current implementation decisions, use [`docs/specs/democracy-v1-spec.md`](../specs/democracy-v1-spec.md). Items such as emergency powers, government-form splits, coalition/parliamentary variants, and broader authoritarian branching are deferred to future phases unless they are formally promoted into the specs.
+
 Democracy 4 suggests that we should model government in layers:
 
 1. Governing structure

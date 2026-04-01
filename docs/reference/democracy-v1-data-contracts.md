@@ -50,7 +50,6 @@ Suggested fields:
 - `BlocSnapshots`
 - `PartySnapshots`
 - `DistrictPoliticalSeeds`
-- `DemandEffects`
 - `RulesetRuntimeState`
 
 ### `GovernmentRuntimeState`
@@ -61,6 +60,7 @@ Responsibilities:
 
 - stores current computed outputs shared across rulesets
 - provides a consistent place for debug and UI reads
+- owns the canonical current demand-effect output at runtime
 
 Suggested fields:
 
@@ -185,6 +185,8 @@ Contract rules:
 - modifiers must be bounded
 - modifiers compose with existing demand logic
 - modifiers do not replace or rewrite the vanilla demand engine
+- the canonical runtime owner is `GovernmentRuntimeState.CurrentDemandEffects`
+- this object should generally remain derived rather than separately persisted in `GovernmentModelState`
 
 ## Election Result Contract
 

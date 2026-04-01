@@ -90,7 +90,7 @@ Content:
 
 ## Always-Visible Political Signals
 
-The HUD should keep a very small political footprint visible at all times.
+The HUD should keep a minimal political footprint visible at all times.
 
 Required always-visible items:
 

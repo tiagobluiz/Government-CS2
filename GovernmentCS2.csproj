@@ -5,11 +5,15 @@
 	
 		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
 		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
+		<CSIIToolPath>$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))</CSIIToolPath>
 	</PropertyGroup>
 	
 	<!--Imports must be after PropertyGroup block-->
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
+	<Target Name="ValidateToolPath" BeforeTargets="Build;Restore" Condition="'$(CSIIToolPath)' == ''">
+		<Error Text="CSII_TOOLPATH not set. Install the Cities: Skylines II modding SDK and set CSII_TOOLPATH before building this project." />
+	</Target>
+	<Import Project="$(CSIIToolPath)\Mod.props" Condition="'$(CSIIToolPath)' != ''" />
+	<Import Project="$(CSIIToolPath)\Mod.targets" Condition="'$(CSIIToolPath)' != ''" />
 
 	<ItemGroup>
 		<Reference Include="Game">

@@ -237,6 +237,8 @@ For a city-government simulation, the most reusable ideas are:
 - **authoritarian logic** for emergency or anti-democratic paths
 - **constitutional-monarchy logic** mainly as a reference for symbolic legitimacy vs executive authority
 
+These are post-V1 design inputs only: `parliamentary / coalition logic`, `presidential logic`, and `constitutional-monarchy logic` should be explored only after the Democracy V1 foundations in [`docs/specs`](../specs) have been validated.
+
 ## Sources
 
 - [Britannica: Parliamentary system](https://www.britannica.com/topic/parliamentary-system)
