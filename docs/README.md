@@ -9,9 +9,10 @@ The package is intentionally written so that a future engineer or agent can star
 1. `roadmap/government-system-roadmap.md`
 2. `specs/democracy-v1-spec.md`
 3. `specs/democracy-v1-implementation-breakdown.md`
-4. `reference/democracy-v1-data-contracts.md`
-5. `reference/democracy-v1-balancing-reference.md`
-6. `reference/government-ui-content-map.md`
+4. `specs/democracy-v1-test-plan.md`
+5. `reference/democracy-v1-data-contracts.md`
+6. `reference/democracy-v1-balancing-reference.md`
+7. `reference/government-ui-content-map.md`
 
 ## What Each Folder Is For
 
@@ -46,6 +47,7 @@ Use these as the main source of truth for:
 - what Democracy V1 must do
 - what is in and out of scope
 - how to break the work into delivery slices
+- how Democracy V1 should be validated
 
 ### `reference`
 
@@ -61,5 +63,6 @@ Use these to understand:
 
 - `specs/democracy-v1-spec.md` is the primary product and behavior source of truth for Democracy V1.
 - `specs/democracy-v1-implementation-breakdown.md` is the primary execution-order source of truth.
+- `specs/democracy-v1-test-plan.md` is the primary validation and QA source of truth.
 - `reference/*` documents support implementation and should stay aligned with the spec.
 - `investigation/*` files are informative but do not override the spec.

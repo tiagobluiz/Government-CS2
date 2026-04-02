@@ -15,10 +15,11 @@ Before proposing, planning, or implementing any government-related change, read 
 1. [`docs/README.md`](docs/README.md)
 2. [`docs/specs/democracy-v1-spec.md`](docs/specs/democracy-v1-spec.md)
 3. [`docs/specs/democracy-v1-implementation-breakdown.md`](docs/specs/democracy-v1-implementation-breakdown.md)
-4. [`docs/reference/democracy-v1-data-contracts.md`](docs/reference/democracy-v1-data-contracts.md)
-5. [`docs/reference/democracy-v1-balancing-reference.md`](docs/reference/democracy-v1-balancing-reference.md)
-6. [`docs/reference/government-ui-content-map.md`](docs/reference/government-ui-content-map.md)
-7. [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md)
+4. [`docs/specs/democracy-v1-test-plan.md`](docs/specs/democracy-v1-test-plan.md)
+5. [`docs/reference/democracy-v1-data-contracts.md`](docs/reference/democracy-v1-data-contracts.md)
+6. [`docs/reference/democracy-v1-balancing-reference.md`](docs/reference/democracy-v1-balancing-reference.md)
+7. [`docs/reference/government-ui-content-map.md`](docs/reference/government-ui-content-map.md)
+8. [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md)
 
 If the task is unrelated to the government system, only read the files needed for that task.
 
@@ -28,9 +29,10 @@ When documents overlap, use this precedence order:
 
 1. [`docs/specs/democracy-v1-spec.md`](docs/specs/democracy-v1-spec.md)
 2. [`docs/specs/democracy-v1-implementation-breakdown.md`](docs/specs/democracy-v1-implementation-breakdown.md)
-3. [`docs/reference/*`](docs/reference)
-4. [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md)
-5. [`docs/investigation/*`](docs/investigation)
+3. [`docs/specs/democracy-v1-test-plan.md`](docs/specs/democracy-v1-test-plan.md)
+4. [`docs/reference/*`](docs/reference)
+5. [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md)
+6. [`docs/investigation/*`](docs/investigation)
 
 Use the investigation files for background and rationale, not to override the spec.
 
@@ -70,6 +72,7 @@ When code changes affect government behavior, the agent must check whether one o
 
 - [`docs/specs/democracy-v1-spec.md`](docs/specs/democracy-v1-spec.md)
 - [`docs/specs/democracy-v1-implementation-breakdown.md`](docs/specs/democracy-v1-implementation-breakdown.md)
+- [`docs/specs/democracy-v1-test-plan.md`](docs/specs/democracy-v1-test-plan.md)
 - [`docs/reference/democracy-v1-data-contracts.md`](docs/reference/democracy-v1-data-contracts.md)
 - [`docs/reference/democracy-v1-balancing-reference.md`](docs/reference/democracy-v1-balancing-reference.md)
 - [`docs/reference/government-ui-content-map.md`](docs/reference/government-ui-content-map.md)
