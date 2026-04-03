@@ -10,6 +10,11 @@ Implementation-wide default:
 - procedural rules should remain in C#
 - configuration loading and validation should be treated as foundation work, not an optional later cleanup step
 
+Shared-foundation note:
+
+- the Phase 0 implementation now already includes typed runtime contracts, a persistence seam, a migration seam, a shared modifier pipeline, a panel shell, and a debug snapshot seam
+- Phase 1 work should build on those seams rather than replacing them ad hoc
+
 The recommended order is:
 
 1. Shared government core and persistence

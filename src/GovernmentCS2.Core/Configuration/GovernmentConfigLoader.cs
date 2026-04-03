@@ -245,7 +245,7 @@ namespace GovernmentCS2.Core.Configuration
 
                 foreach (var blocId in party.AffinityBlocIds)
                 {
-                    if (!validBlocIds.Contains(blocId))
+                    if (!validBlocIds.Contains(blocId, StringComparer.OrdinalIgnoreCase))
                     {
                         errors.Add($"democracy.json party '{party.Id}' references unknown bloc '{blocId}'.");
                     }

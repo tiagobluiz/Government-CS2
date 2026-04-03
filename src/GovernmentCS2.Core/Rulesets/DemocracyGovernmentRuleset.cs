@@ -130,6 +130,7 @@ namespace GovernmentCS2.Core.Rulesets
                 CorruptionPressure = democracy.StartingCorruptionPressure,
                 ElectionCycle = new ElectionCycleState
                 {
+                    // Phase 0 treats CurrentGameTime as "in-game years elapsed" so it can share units with TermLengthYears.
                     CurrentTermIndex = seededFromExistingCity ? 1 : 0,
                     CurrentTermStartGameTime = context.CurrentGameTime,
                     CurrentTermEndGameTime = context.CurrentGameTime + democracy.TermLengthYears,

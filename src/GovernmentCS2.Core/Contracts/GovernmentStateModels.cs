@@ -52,7 +52,7 @@ namespace GovernmentCS2.Core.Contracts
         public IList<PoliticalBlocSnapshot> BlocSnapshots { get; set; } = new List<PoliticalBlocSnapshot>();
         public IList<PartyStandingSnapshot> PartySnapshots { get; set; } = new List<PartyStandingSnapshot>();
         public IDictionary<string, float> DistrictPoliticalSeeds { get; set; } = new Dictionary<string, float>();
-        public object RulesetRuntimeState { get; set; }
+        public IGovernmentRulesetRuntimeState RulesetRuntimeState { get; set; }
     }
 
     public sealed class GovernmentRuntimeState
@@ -64,7 +64,7 @@ namespace GovernmentCS2.Core.Contracts
         public IList<string> CurrentGovernmentStatusFlags { get; set; } = new List<string>();
     }
 
-    public sealed class DemocracyRuntimeState
+    public sealed class DemocracyRuntimeState : IGovernmentRulesetRuntimeState
     {
         public float ElectionPressureScore { get; set; }
         public string RecentPolicyDirectionSummary { get; set; } = "Neutral";

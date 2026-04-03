@@ -37,7 +37,7 @@ namespace GovernmentCS2.Core.Persistence
             {
                 if (!mySteps.TryGetValue(currentVersion, out var step))
                 {
-                    throw new GovernmentSaveMigrationException($"No migration step is registered from schema version {currentVersion} to {targetVersion}.");
+                    throw new GovernmentSaveMigrationException($"No migration step is registered from schema version {currentVersion} to {currentVersion + 1} while migrating toward {targetVersion}.");
                 }
 
                 migratedJson = step.Apply(migratedJson);
@@ -67,7 +67,7 @@ namespace GovernmentCS2.Core.Persistence
                 }
             }
 
-            return 0;
+            throw new GovernmentSaveMigrationException("Government save payload is missing a schemaVersion/SchemaVersion field.");
         }
     }
 }

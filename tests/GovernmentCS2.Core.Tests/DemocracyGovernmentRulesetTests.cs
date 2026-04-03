@@ -27,6 +27,7 @@ namespace GovernmentCS2.Core.Tests
             Assert.Equal(GovernmentUnlockLayer.Layer1, state.CurrentUnlockLayer);
             Assert.Equal(4, state.ElectionCycle.DefaultTermLengthYears);
             Assert.Equal(12L, state.ElectionCycle.CurrentTermStartGameTime);
+            Assert.Equal(16L, state.ElectionCycle.CurrentTermEndGameTime);
             Assert.Equal(6, state.BlocSnapshots.Count);
             Assert.Equal(3, state.PartySnapshots.Count);
         }

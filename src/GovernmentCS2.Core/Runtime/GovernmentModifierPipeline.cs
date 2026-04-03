@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using GovernmentCS2.Core.Configuration;
 using GovernmentCS2.Core.Contracts;
 
@@ -37,9 +38,9 @@ namespace GovernmentCS2.Core.Runtime
             return Math.Max(-cap, Math.Min(cap, value));
         }
 
-        private static System.Collections.Generic.IList<string> MergeReasonCodes(GovernmentDemandEffects input)
+        private static IList<string> MergeReasonCodes(GovernmentDemandEffects input)
         {
-            var reasons = new System.Collections.Generic.List<string>(input.ReasonCodes);
+            var reasons = new List<string>(input.ReasonCodes);
             reasons.Add("phase-0-modifier-pipeline");
             return reasons;
         }

@@ -55,7 +55,9 @@ If implementation reveals the spec is incomplete or technically unworkable:
 - update the relevant docs first, or in the same change, before implementing the divergent behavior
 - state clearly in the final summary what changed in the documentation and why
 
-Agents must also follow the phase ordering defined in [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md) exactly.
+## Phase Ordering
+
+Agents must follow the phase ordering defined in [`docs/roadmap/government-system-roadmap.md`](docs/roadmap/government-system-roadmap.md) exactly.
 
 That means:
 
@@ -68,7 +70,7 @@ That means:
 For government-related implementation work:
 
 - Reuse the shared-core-plus-ruleset architecture described in the roadmap and spec.
-- Follow the roadmap phase order exactly. Complete `Phase 0: Shared foundation` before advancing into `Phase 1: Democracy V1` feature work.
+- Follow the canonical [`Phase Ordering`](#phase-ordering) rule. Complete `Phase 0: Shared foundation` before advancing into `Phase 1: Democracy V1` feature work.
 - Treat extensibility as a hard requirement. Prefer designs that can support later government types without major rewrites.
 - Treat configurability as a hard requirement. Prefer parameterized or data-driven rules over hardcoded behavior when the behavior is likely to vary by government type, tuning pass, difficulty, or settings.
 - Default to JSON-backed configuration for tunable government data unless there is a clear documented reason to use another format.

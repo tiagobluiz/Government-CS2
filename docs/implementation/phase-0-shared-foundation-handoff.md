@@ -135,9 +135,9 @@ The intended Phase 0 execution order has now been satisfied in code.
 
 The next roadmap boundary is `Phase 1: Democracy V1`, but that phase should not begin until the current Phase 0 work is reviewed and accepted.
 
-## Explicit Non-Goals Until Phase 0 Is Done
+## Explicit Non-Goals Before Phase 0 Acceptance
 
-Do not advance into these items yet:
+Before Phase 0 is accepted, do not advance into these items:
 
 - real bloc scoring
 - real party movement
@@ -148,7 +148,7 @@ Do not advance into these items yet:
 - corruption gameplay
 - override-state gameplay
 
-Those belong to later roadmap work.
+Those items are out of scope until Phase 0 has been accepted and Phase 1 formally begins.
 
 ## Verification Commands
 

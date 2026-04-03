@@ -8,7 +8,10 @@ namespace GovernmentCS2.Core.Contracts
 
     public sealed class GovernmentInitializationContext
     {
+        // Reserved for future phases where initialization may reflect city identity in UI and diagnostics.
         public string CityName { get; set; } = string.Empty;
+
+        // Reserved for future phases where seeding will use population-based starting conditions.
         public int PopulationEstimate { get; set; }
         public int CurrentMilestoneLevel { get; set; }
         public long CurrentGameTime { get; set; }

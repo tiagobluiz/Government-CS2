@@ -44,6 +44,18 @@ namespace GovernmentCS2.Core.Tests
             Assert.Contains("demand.globalCap", exception.Message);
         }
 
+        [Fact]
+        public void LoadFromJson_RejectsMissingPartyDefinition()
+        {
+            var democracy = TestConfigFactory.CreateDemocracyConfig();
+            democracy.Parties.RemoveAt(democracy.Parties.Count - 1);
+
+            var exception = Assert.Throws<GovernmentConfigException>(() =>
+                myLoader.LoadFromJson(CreateCoreJson(), JsonSerializer.Serialize(democracy), "test-config"));
+
+            Assert.Contains("exactly 3 parties", exception.Message);
+        }
+
         private static string CreateCoreJson()
         {
             return JsonSerializer.Serialize(TestConfigFactory.CreateCoreConfig());

@@ -42,6 +42,7 @@ namespace GovernmentCS2
 
         public void Dispose()
         {
+            GovernmentModule?.Dispose();
             GovernmentModule = null;
         }
 

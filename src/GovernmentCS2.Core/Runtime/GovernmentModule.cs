@@ -9,7 +9,7 @@ using GovernmentCS2.Core.Rulesets;
 
 namespace GovernmentCS2.Core.Runtime
 {
-    public sealed class GovernmentModule
+    public sealed class GovernmentModule : IDisposable
     {
         private readonly IDictionary<string, IGovernmentRuleset> myRulesets;
         private readonly GovernmentDebugInspector myDebugInspector;
@@ -60,6 +60,8 @@ namespace GovernmentCS2.Core.Runtime
 
             if (!string.IsNullOrWhiteSpace(serializedState))
             {
+                var savedRulesetId = myPersistenceService.ReadRulesetId(serializedState);
+                ruleset = string.IsNullOrWhiteSpace(savedRulesetId) ? ruleset : GetRuleset(savedRulesetId);
                 state = myPersistenceService.Restore(serializedState, ConfigurationSet, ruleset, context);
                 loadedFromSave = true;
             }
@@ -113,6 +115,10 @@ namespace GovernmentCS2.Core.Runtime
         public string SerializeState(GovernmentModelState state)
         {
             return myPersistenceService.Serialize(state);
+        }
+
+        public void Dispose()
+        {
         }
 
         private IGovernmentRuleset GetActiveRuleset()

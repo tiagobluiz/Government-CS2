@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using GovernmentCS2.Core.Configuration;
 using GovernmentCS2.Core.Contracts;
@@ -93,10 +95,93 @@ namespace GovernmentCS2.Core.Persistence
             restoredState.CorruptionPressure = saveData.CorruptionPressure;
             restoredState.ElectionCycle = saveData.ElectionCycleState;
             restoredState.OverrideState = saveData.OverrideState;
-            restoredState.BlocSnapshots = saveData.BlocScores;
-            restoredState.PartySnapshots = saveData.PartyStandings;
-            restoredState.DistrictPoliticalSeeds = saveData.DistrictSeedAggregates;
+            restoredState.BlocSnapshots = ReconcileBlocSnapshots(restoredState.BlocSnapshots, saveData.BlocScores);
+            restoredState.PartySnapshots = ReconcilePartySnapshots(restoredState.PartySnapshots, saveData.PartyStandings);
+            restoredState.DistrictPoliticalSeeds = ReconcileDistrictSeeds(restoredState.DistrictPoliticalSeeds, saveData.DistrictSeedAggregates);
             return restoredState;
+        }
+
+        public string ReadRulesetId(string serializedState)
+        {
+            if (string.IsNullOrWhiteSpace(serializedState))
+            {
+                throw new ArgumentException("Serialized government state cannot be empty.", nameof(serializedState));
+            }
+
+            using (var document = JsonDocument.Parse(serializedState))
+            {
+                if (document.RootElement.TryGetProperty("RulesetId", out var rulesetIdProperty))
+                {
+                    return rulesetIdProperty.GetString() ?? string.Empty;
+                }
+
+                if (document.RootElement.TryGetProperty("rulesetId", out rulesetIdProperty))
+                {
+                    return rulesetIdProperty.GetString() ?? string.Empty;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private static IList<PoliticalBlocSnapshot> ReconcileBlocSnapshots(
+            IList<PoliticalBlocSnapshot> baseline,
+            IList<PoliticalBlocSnapshot> saved)
+        {
+            var baselineById = (baseline ?? new List<PoliticalBlocSnapshot>())
+                .ToDictionary(item => item.BlocId, StringComparer.OrdinalIgnoreCase);
+
+            if (saved != null)
+            {
+                foreach (var snapshot in saved)
+                {
+                    if (snapshot != null && baselineById.ContainsKey(snapshot.BlocId))
+                    {
+                        baselineById[snapshot.BlocId] = snapshot;
+                    }
+                }
+            }
+
+            return baselineById.Values.ToList();
+        }
+
+        private static IList<PartyStandingSnapshot> ReconcilePartySnapshots(
+            IList<PartyStandingSnapshot> baseline,
+            IList<PartyStandingSnapshot> saved)
+        {
+            var baselineById = (baseline ?? new List<PartyStandingSnapshot>())
+                .ToDictionary(item => item.PartyId, StringComparer.OrdinalIgnoreCase);
+
+            if (saved != null)
+            {
+                foreach (var snapshot in saved)
+                {
+                    if (snapshot != null && baselineById.ContainsKey(snapshot.PartyId))
+                    {
+                        baselineById[snapshot.PartyId] = snapshot;
+                    }
+                }
+            }
+
+            return baselineById.Values.ToList();
+        }
+
+        private static IDictionary<string, float> ReconcileDistrictSeeds(
+            IDictionary<string, float> baseline,
+            IDictionary<string, float> saved)
+        {
+            var merged = new Dictionary<string, float>(baseline ?? new Dictionary<string, float>(), StringComparer.OrdinalIgnoreCase);
+            if (saved == null)
+            {
+                return merged;
+            }
+
+            foreach (var entry in saved)
+            {
+                merged[entry.Key] = entry.Value;
+            }
+
+            return merged;
         }
     }
 }

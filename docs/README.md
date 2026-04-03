@@ -6,13 +6,13 @@ The package is intentionally written so that a future engineer or agent can star
 
 ## Recommended Reading Order
 
-1. `roadmap/government-system-roadmap.md`
-2. `specs/democracy-v1-spec.md`
-3. `specs/democracy-v1-implementation-breakdown.md`
-4. `specs/democracy-v1-test-plan.md`
-5. `reference/democracy-v1-data-contracts.md`
-6. `reference/democracy-v1-balancing-reference.md`
-7. `reference/government-ui-content-map.md`
+1. `specs/democracy-v1-spec.md`
+2. `specs/democracy-v1-implementation-breakdown.md`
+3. `specs/democracy-v1-test-plan.md`
+4. `reference/democracy-v1-data-contracts.md`
+5. `reference/democracy-v1-balancing-reference.md`
+6. `reference/government-ui-content-map.md`
+7. `roadmap/government-system-roadmap.md`
 8. `implementation/phase-0-shared-foundation-handoff.md` when working on the current active implementation slice
 
 ## What Each Folder Is For

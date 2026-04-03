@@ -15,6 +15,11 @@ Guiding principles:
 
 The government panel is the main home for political detail.
 
+Shared-foundation note:
+
+- the current codebase already includes `GovernmentPanelViewModel` and `GovernmentPanelShell` as the first implementation seam for this panel
+- later UI work should extend those contracts instead of inventing a disconnected surface
+
 Recommended top-level sections:
 
 - government summary

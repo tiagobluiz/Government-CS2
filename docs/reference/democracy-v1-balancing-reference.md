@@ -145,6 +145,10 @@ The player should be able to answer:
 
 If the player cannot answer those questions, the system is under-explained.
 
+Shared-foundation note:
+
+- `GovernmentDemandEffects`, `GovernmentActionCostResult`, `WarningLevel`, and `GovernmentDebugSnapshot` are the current contract seams that later balancing and explanation work should continue to use
+
 ## Anti-Frustration Rules
 
 - do not put friction on every click

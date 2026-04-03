@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace GovernmentCS2.Core.Persistence
 {
     public interface IGovernmentSaveMigrationStep
