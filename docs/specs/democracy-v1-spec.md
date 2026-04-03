@@ -12,6 +12,7 @@ Democracy V1 is intentionally:
 - generic democracy first, not a parliamentary/presidential split
 - mid-depth, not a full political simulation
 - extensible toward later governments
+- configurable through validated data files for tunable values
 - strongly integrated with existing CS2 systems
 
 This specification is written to be usable by an engineering agent with no prior conversation context.
@@ -121,6 +122,42 @@ Political capital should apply mainly to:
 
 Ordinary city interaction must remain responsive.
 
+### Configurability model
+
+Democracy V1 must be configurable by default.
+
+For implementation purposes, this means:
+
+- tunable government parameters should live in validated JSON configuration files
+- procedural behavior should remain in C# code
+- configuration should be organized so later government types can add their own data without rewriting the loader model
+
+Recommended use of JSON configuration:
+
+- bloc weights and sensitivities
+- party affinities
+- election scoring weights
+- political-capital costs and regeneration coefficients
+- demand modifier caps and per-channel strengths
+- override penalties
+- progression and unlock thresholds
+- consultation and corruption tuning
+
+Not recommended for JSON in v1:
+
+- complex branching logic better expressed in code
+- rules so dynamic that the JSON effectively becomes a scripting language
+- transient runtime state that belongs in save data or calculated runtime state
+
+Recommended initial file layout:
+
+- `config/government/core.json`
+- `config/government/democracy.json`
+
+Recommended implementation rule:
+
+- if a value is expected to vary by ruleset, balancing pass, difficulty, or settings, assume it belongs in configuration unless there is a strong reason to hardcode it
+
 ### Voter bloc
 
 A `voter bloc` is a readable political grouping that represents a family of city interests rather than a literal legal voting class.
@@ -174,6 +211,7 @@ Default behavior decisions:
 - modifier strength: `small bounded direct modifiers`
 - mod interoperability posture: `defensive by default`
 - existing save support: `yes`
+- default configurability approach: `validated JSON-backed tuning`
 
 Democracy V1 should feel safer and more legitimate than later authoritarian systems, but slower and more politically constrained.
 
@@ -225,6 +263,8 @@ Example:
 
 - democracy may use support for elections and approval
 - dictatorship may use a related model for loyalty, fear, unrest, and elite stability
+
+Support calculation thresholds, bloc sensitivities, and weighting constants should be configurable through JSON-backed tuning rather than buried in ruleset logic.
 
 ## Bloc Definitions
 
@@ -517,6 +557,8 @@ Democracy V1 uses three fixed broad parties:
 
 These parties are not deep AI governments. They are lightweight standing trackers that make elections and political pressure easier to read.
 
+Party affinity weights, issue sensitivities, and election scoring contributions should be treated as configuration data, not hardcoded permanent values.
+
 ### Growth
 
 Core issue cluster:
@@ -704,6 +746,8 @@ Reason:
 - CS2 must remain playable as a city-builder
 - political friction should shape decisions, not constantly freeze them
 
+Political-capital costs, regeneration rates, soft caps, and warning thresholds should be JSON-configurable so later tuning does not require code rewrites.
+
 ## Election Cycle and Resolution
 
 ### Cadence
@@ -737,6 +781,8 @@ Recommended interpretation:
 - bloc support measures distribution of support across city interests
 - party standings create readable electoral identity
 - legitimacy modifies whether the government is seen as a proper democratic incumbent
+
+The scoring weights for these inputs should be configurable. The election algorithm should stay in code, but its main coefficients and caps should be data-driven.
 
 ### Player-visible election flow
 
@@ -856,6 +902,8 @@ They must not:
 - dominate city fundamentals
 
 City fundamentals must remain the primary driver.
+
+All government demand caps, per-bar strengths, and channel contribution weights should be JSON-configurable and validated on load.
 
 ### Two demand channels
 
@@ -990,6 +1038,8 @@ Why politically relevant:
 Expected reaction style:
 
 - usually mixed immediate and delayed
+
+Policy-to-bloc mappings, policy-to-party mappings, and default reaction strengths should be configurable through JSON-backed balance data.
 
 ## District Seed Model
 
@@ -1164,6 +1214,8 @@ Democracy V1 must use minimal versioned persistence.
 
 Persist the core state the government system truly owns. Derive or reseed everything else when practical.
 
+Configuration data should not be duplicated into save files unless a future migration requirement makes it necessary. Saves should reference schema-compatible runtime behavior, while JSON configuration remains the source of tunable defaults.
+
 ### Minimum persisted fields
 
 The persisted model must at minimum include:
@@ -1212,6 +1264,12 @@ Each new schema version should:
 - identify the prior version(s) it upgrades
 - define exact field additions or transformations
 - avoid silent data loss where possible
+
+Configuration evolution should also be handled deliberately:
+
+- configuration loaders should validate required fields and ranges on load
+- missing optional values may fall back to documented defaults
+- incompatible configuration changes should fail loudly in development rather than silently changing political behavior
 
 ## UI/UX Requirements
 
@@ -1275,6 +1333,7 @@ Required debug capabilities:
 - demand modifier breakdown visibility
 - election result breakdown visibility
 - override penalty visibility
+- active configuration visibility, including the tuned values currently driving the ruleset
 
 Debug delivery:
 
@@ -1326,6 +1385,7 @@ Democracy V1 is acceptable when all the following are true.
 - The implementation avoids invasive rewrites of the vanilla demand model.
 - The design degrades reasonably around mod interoperability issues.
 - Hidden debug instrumentation is available for balancing.
+- Tunable ruleset values are owned by validated JSON configuration rather than scattered hardcoded constants.
 
 ## Future Extension Hooks
 
@@ -1339,5 +1399,7 @@ At minimum, future governments should be able to replace or reinterpret:
 - how action friction works
 - how corruption behaves
 - how demand confidence is produced
+
+At minimum, future governments should also be able to provide their own configuration payloads without changing the shared configuration loading model.
 
 Democracy V1 should therefore be implemented as the first ruleset on top of a shared government core, not as the whole government architecture.

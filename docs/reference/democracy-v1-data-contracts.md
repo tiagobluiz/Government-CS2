@@ -23,7 +23,46 @@ Recommended naming principles:
 - `ViewModel` for UI-facing data
 - `SaveData` for persisted state
 
+Recommended ownership principles:
+
+- runtime state belongs to owned `State` objects
+- persisted state belongs to versioned `SaveData`
+- tunable balance/configuration data belongs to validated JSON configuration models loaded separately from save data
+
 ## Runtime State Objects
+
+## Configuration Objects
+
+Democracy V1 should separate runtime state from configuration data.
+
+Configuration data is not the same thing as save data:
+
+- configuration defines how the ruleset behaves by default
+- save data defines what state the current city is in
+
+Recommended initial file layout:
+
+- `config/government/core.json`
+- `config/government/democracy.json`
+
+Recommended conceptual configuration models:
+
+- `GovernmentCoreConfig`
+- `DemocracyConfig`
+- `BlocConfig`
+- `PartyConfig`
+- `ElectionConfig`
+- `PoliticalCapitalConfig`
+- `DemandEffectConfig`
+- `ProgressionConfig`
+- `OverridePenaltyConfig`
+
+Configuration contract rules:
+
+- configuration should be loaded and validated at startup or first use
+- configuration should fail loudly in development when required fields are missing or invalid
+- configuration should own weights, thresholds, caps, affinities, and tunable mappings
+- configuration should not try to encode arbitrary procedural logic
 
 ### `GovernmentModelState`
 
@@ -35,6 +74,10 @@ Responsibilities:
 - stores current core political values
 - points to government-specific runtime state
 - stores persistent political timers and flags
+
+Important ownership rule:
+
+- this object should not become a dumping ground for tunable constants that belong in configuration
 
 Suggested fields:
 
@@ -61,6 +104,10 @@ Responsibilities:
 - stores current computed outputs shared across rulesets
 - provides a consistent place for debug and UI reads
 - owns the canonical current demand-effect output at runtime
+
+Important ownership rule:
+
+- this object may cache references or snapshots of active configuration for debug visibility, but it should not own the source of truth for tunable configuration values
 
 Suggested fields:
 
@@ -96,6 +143,8 @@ Suggested fields:
 
 Minimal versioned persisted data for the first government implementation.
 
+This object persists city-specific political state. It does not persist the ruleset's normal tuning tables.
+
 Required persisted fields:
 
 - `SchemaVersion`
@@ -117,6 +166,15 @@ Fields that should generally remain derived rather than persisted:
 - last-opened UI tab
 - transient notification state
 - recomputable debug-only summaries
+
+Fields that should generally remain configuration-owned rather than persisted:
+
+- election coefficients
+- bloc weight tables
+- party affinity tables
+- demand caps
+- political-capital costs
+- unlock thresholds
 
 ### `ElectionCycleState`
 
@@ -155,9 +213,19 @@ Suggested methods:
 - `ResolveMajorGovernmentEvent(...)`
 - `BuildPanelViewModel(...)`
 
+Suggested configuration-oriented methods or collaborators:
+
+- `LoadConfig(...)`
+- `ValidateConfig(...)`
+- or a separate ruleset configuration provider injected into the ruleset
+
 Important rule:
 
 The interface should not assume elections always exist. Democracy uses elections, but future governments may not.
+
+Important configurability rule:
+
+The ruleset should consume typed configuration models rather than reading ad hoc constants spread across multiple systems.
 
 ## Demand Modifier Contract
 
@@ -187,6 +255,10 @@ Contract rules:
 - modifiers do not replace or rewrite the vanilla demand engine
 - the canonical runtime owner is `GovernmentRuntimeState.CurrentDemandEffects`
 - this object should generally remain derived rather than separately persisted in `GovernmentModelState`
+
+Configuration note:
+
+- caps, coefficients, and channel weights that produce these modifiers should be owned by configuration objects, not by the result object itself
 
 ## Election Result Contract
 
@@ -235,6 +307,10 @@ Suggested fields:
 - `PrimaryDemandChannels`
 - `DistrictSensitivityMode`
 
+Configuration note:
+
+- bloc thresholds, sensitivities, and issue weights should live in configuration
+
 ## Party Snapshot Contract
 
 ### `PartyStandingSnapshot`
@@ -256,6 +332,10 @@ Suggested fields:
 - `IssueAlignmentSummary`
 - `TopPositiveDrivers`
 - `TopNegativeDrivers`
+
+Configuration note:
+
+- party affinity matrices and issue sensitivity tables should live in configuration
 
 ## Government Panel View Model Contract
 
@@ -308,6 +388,10 @@ Migration contract rules:
 - migration should be deterministic
 - migration should avoid silent resets unless absolutely required
 
+Configuration compatibility note:
+
+- migrations should assume configuration may evolve separately from saved runtime state, so saved fields should remain semantic rather than duplicating fragile tuning tables
+
 ## Government Action Cost Contract
 
 ### `GovernmentActionCostResult`
@@ -334,3 +418,7 @@ Suggested fields:
 Important default:
 
 `IsHardBlocked` should usually be false in democracy v1. The main pattern is cost plus warning, not broad denial of action.
+
+Configuration note:
+
+- cost curves, warning thresholds, and soft-block heuristics should be configuration-owned wherever practical

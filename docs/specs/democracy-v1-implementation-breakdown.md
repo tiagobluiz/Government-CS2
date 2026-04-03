@@ -4,6 +4,12 @@
 
 This document converts the democracy specification into execution workstreams.
 
+Implementation-wide default:
+
+- tunable government behavior should be backed by validated JSON configuration files
+- procedural rules should remain in C#
+- configuration loading and validation should be treated as foundation work, not an optional later cleanup step
+
 The recommended order is:
 
 1. Shared government core and persistence
@@ -37,6 +43,7 @@ Create the reusable government foundation that all future government types can s
 
 - a government state owner/service
 - a ruleset abstraction such as `IGovernmentRuleset`
+- typed configuration loader(s) for shared government and democracy tuning
 - runtime state container(s)
 - minimal versioned save model
 - migration skeleton
@@ -46,6 +53,8 @@ Create the reusable government foundation that all future government types can s
 
 - Define government-owned runtime state and save state.
 - Define a ruleset interface that lets democracy plug in as the first implementation.
+- Define typed JSON configuration models for shared government and democracy-specific tunables.
+- Define configuration validation rules and startup/load behavior.
 - Add a save schema version field from day one.
 - Add an existing-save initialization path.
 - Add a bounded modifier output contract that later workstreams can consume.
@@ -56,6 +65,7 @@ Create the reusable government foundation that all future government types can s
 - existing save seeds cleanly
 - state survives save/load
 - schema version is stored and read correctly
+- configuration files load successfully and fail loudly when required fields are missing or invalid
 
 ### Failure risks
 
@@ -68,6 +78,7 @@ Create the reusable government foundation that all future government types can s
 - keep the core intentionally small
 - do not put election-specific logic here
 - prefer explicit state ownership to global ad hoc reads
+- keep configuration separate from save data and runtime state
 
 ## Workstream 2: Democracy State and Update Loop
 
@@ -97,6 +108,7 @@ Implement the democracy-specific runtime model and periodic political recalculat
 - Implement three party standings.
 - Separate fast-moving approval from slower-moving legitimacy.
 - Feed lightweight political capital regeneration from the runtime state.
+- Source bloc weights, party affinities, thresholds, and regeneration coefficients from typed JSON-backed configuration.
 
 ### Tests
 
@@ -104,6 +116,7 @@ Implement the democracy-specific runtime model and periodic political recalculat
 - bloc reactions change when taxes, jobs, or services change
 - approval and legitimacy can diverge
 - district data exists without taking over the system
+- config-driven tuning changes alter results without code changes
 
 ### Failure risks
 
@@ -141,6 +154,7 @@ Implement the democratic retention-of-power loop.
 - Create the light-interrupt election presentation flow.
 - Implement incumbent win/loss determination.
 - Implement the election override path.
+- Keep election coefficients and caps in JSON-backed configuration while keeping the resolution algorithm in code.
 
 ### Tests
 
@@ -148,6 +162,7 @@ Implement the democratic retention-of-power loop.
 - resolution uses all required inputs
 - election result is readable to the player
 - loss can transition to override state
+- election weighting changes can be validated through configuration-driven test cases
 
 ### Failure risks
 
@@ -184,6 +199,7 @@ Connect government state to CS2 demand safely and visibly.
 - Map legitimacy and confidence into a general demand-confidence channel.
 - Map political posture into a policy-direction channel.
 - Make sure residential, commercial, industrial, and office each read political state in distinct ways.
+- Drive caps, per-bar multipliers, and channel strengths from configuration.
 
 ### Tests
 
@@ -191,6 +207,7 @@ Connect government state to CS2 demand safely and visibly.
 - modifiers remain bounded
 - city fundamentals still dominate demand
 - low legitimacy weakens confidence appropriately
+- configuration caps prevent out-of-range demand effects
 
 ### Failure risks
 
@@ -227,6 +244,7 @@ Connect democracy to the existing decisions players already make in CS2.
 - Wire major service budget changes into bloc, party, approval, and political-capital consequences.
 - Wire selected policy themes into the same reaction system.
 - Determine which zoning actions count as major enough to matter politically.
+- Keep reaction strengths and mappings data-driven through configuration tables wherever practical.
 
 ### Tests
 
@@ -234,6 +252,7 @@ Connect democracy to the existing decisions players already make in CS2.
 - service budget changes produce immediate and delayed effects
 - selected policy themes move the expected blocs and parties
 - ordinary zoning stays responsive
+- configuration updates can rebalance reactions without touching core logic
 
 ### Failure risks
 
@@ -318,6 +337,7 @@ Introduce democracy in layers so players are not overwhelmed early.
 - Gate systems by current unlock layer.
 - Trigger unlocks from a mix of city milestones and election progression.
 - Present explicit unlock explanations.
+- Keep thresholds and progression gates configuration-backed where practical.
 
 ### Tests
 
@@ -325,6 +345,7 @@ Introduce democracy in layers so players are not overwhelmed early.
 - layer 2 adds parties, political capital, and major decision friction
 - layer 3 adds consultation, corruption, and district effects
 - unlock messaging is clear
+- unlock thresholds can be tuned through configuration without code edits
 
 ### Failure risks
 
@@ -359,12 +380,14 @@ Support election loss continuity without collapsing democracy into a full author
 - Apply legitimacy damage, economic confidence penalty, and slower political recovery by default.
 - Add settings support for penalty disablement in sandbox-like play.
 - Ensure the UI remains explicit about the override condition.
+- Keep penalty strengths and recovery modifiers configuration-backed.
 
 ### Tests
 
 - default override state applies all expected penalties
 - sandbox setting disables penalties cleanly
 - override state does not silently masquerade as normal democracy
+- override-penalty edge cases are covered with matrix-style configuration tests
 
 ### Failure risks
 
@@ -401,12 +424,14 @@ Make the political system tunable and inspectable.
 - expose demand modifier sources and caps
 - expose election resolution weighting
 - expose override penalty state
+- expose the active loaded configuration and resolved tuned values for debugging
 
 ### Tests
 
 - debug panel reflects real runtime state
 - logs are useful without being overwhelming
 - balancing work can trace political cause and effect
+- configuration validation failures are discoverable and actionable
 
 ### Failure risks
 
@@ -427,6 +452,7 @@ Each workstream is done only when:
 - debug visibility is adequate for the subsystem
 - obvious balancing parameters are exposed
 - known failure risks are documented or handled
+- configuration ownership is clear enough that future tuning does not require hunting through unrelated code
 
 ## Final Integration Criteria
 
