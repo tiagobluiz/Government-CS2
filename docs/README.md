@@ -13,6 +13,7 @@ The package is intentionally written so that a future engineer or agent can star
 5. `reference/democracy-v1-data-contracts.md`
 6. `reference/democracy-v1-balancing-reference.md`
 7. `reference/government-ui-content-map.md`
+8. `implementation/phase-0-shared-foundation-handoff.md` when working on the current active implementation slice
 
 ## What Each Folder Is For
 
@@ -58,6 +59,16 @@ Use these to understand:
 - state and interface contracts
 - balancing guardrails
 - UI information architecture
+
+### `implementation`
+
+Phase-specific execution handoffs and continuity documents.
+
+Use these when:
+
+- an implementation slice is actively underway
+- a new contributor or agent needs to resume work without prior chat context
+- the team wants a highly operational summary of the current build phase
 
 ## Source of Truth Rules
 

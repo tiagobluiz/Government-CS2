@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "defaultRulesetId": "democracy",
+  "supportUpdateIntervalDays": 30,
+  "defaultDemandModifierCap": 15.0,
+  "logging": {
+    "emitConfigurationSummary": true
+  }
+}
