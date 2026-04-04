@@ -7,7 +7,11 @@ namespace GovernmentCS2.Core.Presentation
 {
     public sealed class GovernmentPanelShell
     {
-        public GovernmentPanelViewModel Build(IGovernmentRuleset ruleset, GovernmentModelState state, GovernmentConfigurationSet configurationSet)
+        public GovernmentPanelViewModel Build(
+            IGovernmentRuleset ruleset,
+            GovernmentModelState state,
+            GovernmentRuntimeState runtimeState,
+            GovernmentConfigurationSet configurationSet)
         {
             if (ruleset == null)
             {
@@ -20,7 +24,13 @@ namespace GovernmentCS2.Core.Presentation
                 throw new InvalidOperationException("Ruleset returned a null government panel view model.");
             }
 
-            panel.ActionWarnings.Add("phase-0-panel-shell");
+            if (runtimeState != null)
+            {
+                panel.CurrentRiskLevel = runtimeState.CurrentRiskLevel;
+                panel.DemandEffectSummary = runtimeState.CurrentDemandEffects ?? new GovernmentDemandEffects();
+                runtimeState.CurrentGovernmentStatusFlags.Add("phase-0-panel-shell");
+            }
+
             return panel;
         }
     }

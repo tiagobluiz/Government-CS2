@@ -110,13 +110,14 @@ namespace GovernmentCS2.Core.Rulesets
             var context = initializationContext ?? new GovernmentInitializationContext();
             var unlockLayer = democracy.StartingUnlockLayer;
 
-            if (seededFromExistingCity && context.CurrentMilestoneLevel >= 10)
+            if (seededFromExistingCity)
             {
-                unlockLayer = GovernmentUnlockLayer.Layer3;
-            }
-            else if (seededFromExistingCity && context.CurrentMilestoneLevel >= 5)
-            {
-                unlockLayer = GovernmentUnlockLayer.Layer2;
+                unlockLayer = democracy.Unlocks
+                    .Where(unlock => context.CurrentMilestoneLevel >= unlock.CityMilestoneThreshold)
+                    .OrderByDescending(unlock => (int)unlock.Layer)
+                    .Select(unlock => unlock.Layer)
+                    .DefaultIfEmpty(democracy.StartingUnlockLayer)
+                    .First();
             }
 
             return new GovernmentModelState
@@ -160,7 +161,7 @@ namespace GovernmentCS2.Core.Rulesets
                     "Phase 0 baseline state"
                 },
                 TopNegativeDrivers = new List<string>(),
-                PrimaryDemandChannels = blocConfig.PrimaryDemandChannels.ToList(),
+                PrimaryDemandChannels = (blocConfig.PrimaryDemandChannels ?? new List<string>()).ToList(),
                 DistrictSensitivityMode = blocConfig.DistrictSensitive ? DistrictSensitivityMode.Light : DistrictSensitivityMode.None
             };
         }
@@ -173,7 +174,7 @@ namespace GovernmentCS2.Core.Rulesets
                 DisplayName = partyConfig.DisplayName,
                 CurrentStanding = 50f,
                 Trend = PoliticalTrend.Stable,
-                BlocAffinitySummary = partyConfig.AffinityBlocIds.ToList(),
+                BlocAffinitySummary = (partyConfig.AffinityBlocIds ?? new List<string>()).ToList(),
                 IssueAlignmentSummary = new List<string>
                 {
                     "Phase 0 baseline alignment"

@@ -75,7 +75,7 @@ namespace GovernmentCS2.Core.Runtime
             }
 
             var runtimeState = TickUpdate(state);
-            var panelViewModel = myPanelShell.Build(GetRuleset(state.ActiveRulesetId), state, ConfigurationSet);
+            var panelViewModel = myPanelShell.Build(GetRuleset(state.ActiveRulesetId), state, runtimeState, ConfigurationSet);
             var debugSnapshot = myDebugInspector.Capture(state, runtimeState, panelViewModel, ConfigurationSet, initializationMode);
 
             return new GovernmentBootstrapResult

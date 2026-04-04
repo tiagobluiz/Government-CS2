@@ -109,10 +109,12 @@ The following roadmap Phase 0 deliverables now exist in code:
 
 - `GovernmentModifierPipeline` now owns shared clamping/composition behavior for government demand effects
 - the ruleset still emits placeholder effects by design, but the shared pipeline seam now exists
+- the government panel now reads post-pipeline runtime demand/risk values so UI, runtime, and debug surfaces stay aligned
 
 ### Government panel shell
 
 - `GovernmentPanelShell` now provides the first dedicated panel host seam on top of the panel view model contract
+- internal phase/debug markers now live in runtime diagnostics instead of player-facing warning text
 - this is intentionally a shell, not a finished player-facing UI
 
 ### Debug logging and internal visibility
@@ -127,6 +129,7 @@ The following roadmap Phase 0 deliverables now exist in code:
   - new-city initialization
   - existing-city seeding
   - restore from serialized government state
+- existing-city seeding now resolves unlock layer from configured `democracy.Unlocks` thresholds instead of hardcoded milestone values
 - the current path is intentionally foundational and does not yet read live CS2 household/economy data, which belongs to later work
 
 ## Phase 0 Execution Order

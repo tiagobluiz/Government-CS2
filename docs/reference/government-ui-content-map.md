@@ -19,6 +19,7 @@ Shared-foundation note:
 
 - the current codebase already includes `GovernmentPanelViewModel` and `GovernmentPanelShell` as the first implementation seam for this panel
 - later UI work should extend those contracts instead of inventing a disconnected surface
+- the panel shell may overlay post-pipeline runtime values so the panel matches the live runtime/debug state
 
 Recommended top-level sections:
 
@@ -118,6 +119,7 @@ Explanation requirements:
 
 - clearly state whether the effect comes from confidence/legitimacy or policy direction
 - use plain cause-and-effect language
+- player-facing warnings must remain readable copy; internal diagnostics should stay out of `ActionWarnings`
 
 ## Election Presentation Flow
 

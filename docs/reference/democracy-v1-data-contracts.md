@@ -147,6 +147,7 @@ Current implementation notes:
 
 - `CurrentDemandEffects` is passed through the shared modifier pipeline before becoming the canonical runtime output
 - `CurrentGovernmentStatusFlags` is the current lightweight debug/status seam for cross-cutting runtime markers
+- player-facing warning text must not be mixed into `CurrentGovernmentStatusFlags`
 
 ### `DemocracyRuntimeState`
 
@@ -420,6 +421,8 @@ Suggested fields:
 Current Phase 0 note:
 
 - this contract is already used by the `GovernmentPanelShell` as the first government panel seam
+- `GovernmentPanelShell` may overlay post-pipeline runtime values such as risk and demand summary onto the panel view model
+- `ActionWarnings` is reserved for readable player-facing copy; internal phase/debug markers belong in runtime diagnostics instead
 
 ## Migration Contract
 

@@ -41,6 +41,13 @@ namespace GovernmentCS2.Core.Persistence
                 }
 
                 migratedJson = step.Apply(migratedJson);
+
+                if (step.ToVersion <= currentVersion)
+                {
+                    throw new GovernmentSaveMigrationException(
+                        $"Migration step from schema version {currentVersion} must advance to a higher version, but ended at {step.ToVersion}.");
+                }
+
                 currentVersion = step.ToVersion;
             }
 

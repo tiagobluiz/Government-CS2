@@ -47,9 +47,12 @@ namespace GovernmentCS2.Core.Tests
             Assert.Contains(GovernmentRulesetIds.Democracy, module.RegisteredRulesetIds);
             Assert.Contains("phase-0-foundation", bootstrap.RuntimeState.CurrentGovernmentStatusFlags);
             Assert.Contains("phase-0-runtime-pipeline", bootstrap.RuntimeState.CurrentGovernmentStatusFlags);
+            Assert.Contains("phase-0-panel-shell", bootstrap.RuntimeState.CurrentGovernmentStatusFlags);
             Assert.Contains("phase-0-demand-effects-placeholder", bootstrap.RuntimeState.CurrentDemandEffects.ReasonCodes);
             Assert.Contains("phase-0-modifier-pipeline", bootstrap.RuntimeState.CurrentDemandEffects.ReasonCodes);
-            Assert.Contains("phase-0-panel-shell", bootstrap.PanelViewModel.ActionWarnings);
+            Assert.DoesNotContain("phase-0-panel-shell", bootstrap.PanelViewModel.ActionWarnings);
+            Assert.Same(bootstrap.RuntimeState.CurrentDemandEffects, bootstrap.PanelViewModel.DemandEffectSummary);
+            Assert.Equal(bootstrap.RuntimeState.CurrentRiskLevel, bootstrap.PanelViewModel.CurrentRiskLevel);
             Assert.Equal("NewCity", bootstrap.DebugSnapshot.InitializationMode);
         }
 
@@ -71,6 +74,26 @@ namespace GovernmentCS2.Core.Tests
             Assert.Equal(GovernmentUnlockLayer.Layer2, bootstrap.State.CurrentUnlockLayer);
             Assert.False(bootstrap.LoadedFromSave);
             Assert.Equal("ExistingCity", bootstrap.DebugSnapshot.InitializationMode);
+        }
+
+        [Fact]
+        public void Initialize_ExistingCityUsesConfiguredUnlockThresholds()
+        {
+            var configurationSet = TestConfigFactory.CreateConfigurationSet();
+            configurationSet.Democracy.Unlocks[1].CityMilestoneThreshold = 2;
+            configurationSet.Democracy.Unlocks[2].CityMilestoneThreshold = 4;
+            var module = GovernmentModule.CreateDefault(configurationSet);
+
+            var bootstrap = module.Initialize(
+                GovernmentInitializationMode.ExistingCity,
+                new GovernmentInitializationContext
+                {
+                    CityName = "Configured Existing City",
+                    CurrentMilestoneLevel = 4,
+                    CurrentGameTime = 42L
+                });
+
+            Assert.Equal(GovernmentUnlockLayer.Layer3, bootstrap.State.CurrentUnlockLayer);
         }
 
         [Fact]
@@ -108,6 +131,38 @@ namespace GovernmentCS2.Core.Tests
             var exception = Assert.Throws<GovernmentSaveMigrationException>(() => runner.MigrateToVersion(legacyJson, 1));
 
             Assert.Contains("No migration step", exception.Message);
+        }
+
+        [Fact]
+        public void MigrationRunner_ThrowsWhenMigrationStepDoesNotAdvanceVersion()
+        {
+            var runner = new GovernmentSaveMigrationRunner(new IGovernmentSaveMigrationStep[]
+            {
+                new StubMigrationStep(1, 1)
+            });
+
+            var exception = Assert.Throws<GovernmentSaveMigrationException>(() =>
+                runner.MigrateToVersion("{ \"SchemaVersion\": 1 }", 2));
+
+            Assert.Contains("must advance", exception.Message);
+        }
+
+        private sealed class StubMigrationStep : IGovernmentSaveMigrationStep
+        {
+            public StubMigrationStep(int fromVersion, int toVersion)
+            {
+                FromVersion = fromVersion;
+                ToVersion = toVersion;
+            }
+
+            public int FromVersion { get; }
+
+            public int ToVersion { get; }
+
+            public string Apply(string serializedState)
+            {
+                return serializedState;
+            }
         }
     }
 }

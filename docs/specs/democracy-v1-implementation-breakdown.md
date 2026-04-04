@@ -63,6 +63,7 @@ Create the reusable government foundation that all future government types can s
 - Add a save schema version field from day one.
 - Add an existing-save initialization path.
 - Add a bounded modifier output contract that later workstreams can consume.
+- Ensure config-driven thresholds such as democracy unlock layers are consumed from JSON instead of duplicated as hardcoded runtime values.
 
 ### Tests
 

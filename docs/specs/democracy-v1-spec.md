@@ -1269,6 +1269,7 @@ If a save has no government data:
 Implementation expectation:
 
 - existing-city seeding must remain a distinct path from new-city initialization even when both temporarily share baseline logic
+- unlock-layer seeding for existing cities should be driven from configured `democracy.Unlocks` thresholds rather than hardcoded milestone values
 
 ### Migration rules
 
@@ -1308,6 +1309,8 @@ Shared-foundation note:
 
 - the current implementation already includes a `GovernmentPanelViewModel` and `GovernmentPanelShell` seam
 - this is a shell-level foundation, not a finished Democracy V1 UI
+- the panel shell is responsible for keeping panel risk/demand summaries aligned with post-pipeline runtime state
+- player-facing warnings should remain readable UI text, while internal markers stay in runtime diagnostics
 
 ### Always-visible political signals
 

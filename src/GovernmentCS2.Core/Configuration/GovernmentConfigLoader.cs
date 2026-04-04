@@ -145,7 +145,8 @@ namespace GovernmentCS2.Core.Configuration
 
             ValidateUnlocks(errors, democracy.Unlocks);
             ValidateBlocs(errors, democracy.Blocs);
-            ValidateParties(errors, democracy.Parties, democracy.Blocs.Select(bloc => bloc.Id).ToArray());
+            var validBlocIds = democracy.Blocs?.Select(bloc => bloc.Id).ToArray() ?? Array.Empty<string>();
+            ValidateParties(errors, democracy.Parties, validBlocIds);
 
             return errors;
         }
@@ -208,6 +209,11 @@ namespace GovernmentCS2.Core.Configuration
                 }
 
                 ValidatePositive(errors, bloc.BaseWeight, $"democracy.json bloc '{bloc.Id}' baseWeight");
+
+                if (bloc.PrimaryDemandChannels == null || bloc.PrimaryDemandChannels.Count == 0)
+                {
+                    errors.Add($"democracy.json bloc '{bloc.Id}' must declare one or more primaryDemandChannels.");
+                }
             }
         }
 
@@ -242,6 +248,12 @@ namespace GovernmentCS2.Core.Configuration
                 }
 
                 ValidatePositive(errors, party.BaseWeight, $"democracy.json party '{party.Id}' baseWeight");
+
+                if (party.AffinityBlocIds == null || party.AffinityBlocIds.Count == 0)
+                {
+                    errors.Add($"democracy.json party '{party.Id}' must declare one or more affinityBlocIds.");
+                    continue;
+                }
 
                 foreach (var blocId in party.AffinityBlocIds)
                 {

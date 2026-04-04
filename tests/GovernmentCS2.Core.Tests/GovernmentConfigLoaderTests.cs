@@ -56,6 +56,30 @@ namespace GovernmentCS2.Core.Tests
             Assert.Contains("exactly 3 parties", exception.Message);
         }
 
+        [Fact]
+        public void LoadFromJson_RejectsBlocWithoutDemandChannels()
+        {
+            var democracy = TestConfigFactory.CreateDemocracyConfig();
+            democracy.Blocs[0].PrimaryDemandChannels = null;
+
+            var exception = Assert.Throws<GovernmentConfigException>(() =>
+                myLoader.LoadFromJson(CreateCoreJson(), JsonSerializer.Serialize(democracy), "test-config"));
+
+            Assert.Contains("primaryDemandChannels", exception.Message);
+        }
+
+        [Fact]
+        public void LoadFromJson_RejectsPartyWithoutAffinityBlocIds()
+        {
+            var democracy = TestConfigFactory.CreateDemocracyConfig();
+            democracy.Parties[0].AffinityBlocIds = null;
+
+            var exception = Assert.Throws<GovernmentConfigException>(() =>
+                myLoader.LoadFromJson(CreateCoreJson(), JsonSerializer.Serialize(democracy), "test-config"));
+
+            Assert.Contains("affinityBlocIds", exception.Message);
+        }
+
         private static string CreateCoreJson()
         {
             return JsonSerializer.Serialize(TestConfigFactory.CreateCoreConfig());
