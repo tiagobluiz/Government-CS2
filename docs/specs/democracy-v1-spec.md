@@ -1216,6 +1216,11 @@ Persist the core state the government system truly owns. Derive or reseed everyt
 
 Configuration data should not be duplicated into save files unless a future migration requirement makes it necessary. Saves should reference schema-compatible runtime behavior, while JSON configuration remains the source of tunable defaults.
 
+Current implementation note:
+
+- the shared foundation already uses a `GovernmentModelState` runtime contract, a `GovernmentSaveDataV1` persisted contract, and a separate transient `IGovernmentRulesetRuntimeState` seam
+- this split is intentional and should be preserved as the system grows
+
 ### Minimum persisted fields
 
 The persisted model must at minimum include:
@@ -1243,6 +1248,12 @@ The following should generally not be persisted unless implementation requires i
 - UI-only grouping state
 - debug-only display aggregates
 
+Also keep out of persisted save data:
+
+- `RulesetRuntimeState`
+- debug snapshots
+- panel-shell-only output
+
 ### Existing save initialization
 
 Existing saves must be supported.
@@ -1254,6 +1265,11 @@ If a save has no government data:
 - seed blocs and parties from current city signals
 - initialize election timing with a sensible starting schedule
 - set default unlock layer according to city maturity if desired, or start safely at the lowest compatible layer
+
+Implementation expectation:
+
+- existing-city seeding must remain a distinct path from new-city initialization even when both temporarily share baseline logic
+- unlock-layer seeding for existing cities should be driven from configured `democracy.Unlocks` thresholds rather than hardcoded milestone values
 
 ### Migration rules
 
@@ -1288,6 +1304,13 @@ That panel should contain:
 - party standings
 - political capital
 - active modifiers or major political effects
+
+Shared-foundation note:
+
+- the current implementation already includes a `GovernmentPanelViewModel` and `GovernmentPanelShell` seam
+- this is a shell-level foundation, not a finished Democracy V1 UI
+- the panel shell is responsible for keeping panel risk/demand summaries aligned with post-pipeline runtime state
+- player-facing warnings should remain readable UI text, while internal markers stay in runtime diagnostics
 
 ### Always-visible political signals
 
@@ -1334,6 +1357,10 @@ Required debug capabilities:
 - election result breakdown visibility
 - override penalty visibility
 - active configuration visibility, including the tuned values currently driving the ruleset
+
+Shared-foundation note:
+
+- the current foundation includes a typed `GovernmentDebugSnapshot` contract to support later hidden debug tooling
 
 Debug delivery:
 

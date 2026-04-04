@@ -28,6 +28,25 @@ Recommended ownership principles:
 - runtime state belongs to owned `State` objects
 - persisted state belongs to versioned `SaveData`
 - tunable balance/configuration data belongs to validated JSON configuration models loaded separately from save data
+- transient ruleset-only runtime details belong to typed ruleset runtime contracts and should not be serialized accidentally
+
+## Phase 0 Implementation Note
+
+The current codebase already includes the first concrete forms of the contracts described here.
+
+Implemented concrete types now include:
+
+- `GovernmentModelState`
+- `GovernmentRuntimeState`
+- `GovernmentSaveDataV1`
+- `GovernmentInitializationContext`
+- `GovernmentBootstrapResult`
+- `GovernmentDebugSnapshot`
+- `IGovernmentRulesetRuntimeState`
+- `DemocracyRuntimeState`
+- `GovernmentPanelViewModel`
+- `GovernmentDemandEffects`
+- `GovernmentActionCostResult`
 
 ## Runtime State Objects
 
@@ -95,6 +114,13 @@ Suggested fields:
 - `DistrictPoliticalSeeds`
 - `RulesetRuntimeState`
 
+Current implementation notes:
+
+- `ActiveRulesetId` is the runtime source-of-truth ruleset identifier
+- `SchemaVersion` is persisted and restored through `GovernmentSaveDataV1`
+- `RulesetRuntimeState` is now typed as `IGovernmentRulesetRuntimeState`
+- `RulesetRuntimeState` is explicitly transient and is deliberately not carried by `GovernmentSaveDataV1`
+
 ### `GovernmentRuntimeState`
 
 Shared runtime shell for cross-government computed state.
@@ -117,6 +143,12 @@ Suggested fields:
 - `CurrentActionFrictionSummary`
 - `CurrentGovernmentStatusFlags`
 
+Current implementation notes:
+
+- `CurrentDemandEffects` is passed through the shared modifier pipeline before becoming the canonical runtime output
+- `CurrentGovernmentStatusFlags` is the current lightweight debug/status seam for cross-cutting runtime markers
+- player-facing warning text must not be mixed into `CurrentGovernmentStatusFlags`
+
 ### `DemocracyRuntimeState`
 
 Democracy-specific runtime data that does not belong in the shared shell.
@@ -136,6 +168,20 @@ Suggested fields:
 - `RecentBlocShiftSummary`
 - `RecentPartyShiftSummary`
 - `RecentOverridePenaltyState`
+
+### `IGovernmentRulesetRuntimeState`
+
+Typed base contract for ruleset-specific transient runtime state.
+
+Responsibilities:
+
+- give rulesets a typed place to store non-shared runtime details
+- avoid using `object` for ruleset runtime state
+- make ephemeral-vs-persistent ownership explicit
+
+Important rule:
+
+- this state is recalculated or re-seeded at runtime and must not be serialized into `GovernmentSaveDataV1`
 
 ## Save Objects
 
@@ -176,6 +222,11 @@ Fields that should generally remain configuration-owned rather than persisted:
 - political-capital costs
 - unlock thresholds
 
+Explicit exclusion:
+
+- `RulesetRuntimeState` is not part of `GovernmentSaveDataV1`
+- debug snapshots are not part of `GovernmentSaveDataV1`
+
 ### `ElectionCycleState`
 
 Persisted election schedule and current term state.
@@ -187,6 +238,10 @@ Suggested fields:
 - `CurrentTermEndGameTime`
 - `DefaultTermLengthYears`
 - `LastElectionResult`
+
+Current Phase 0 convention:
+
+- `CurrentTermStartGameTime` and `CurrentTermEndGameTime` currently use the same abstract in-game-year unit as `DefaultTermLengthYears`
 
 ## Ruleset Interface Contract
 
@@ -363,6 +418,12 @@ Suggested fields:
 - `UnlockLayerSummary`
 - `ActionWarnings`
 
+Current Phase 0 note:
+
+- this contract is already used by the `GovernmentPanelShell` as the first government panel seam
+- `GovernmentPanelShell` may overlay post-pipeline runtime values such as risk and demand summary onto the panel view model
+- `ActionWarnings` is reserved for readable player-facing copy; internal phase/debug markers belong in runtime diagnostics instead
+
 ## Migration Contract
 
 ### `GovernmentMigrationStep`
@@ -391,6 +452,11 @@ Migration contract rules:
 Configuration compatibility note:
 
 - migrations should assume configuration may evolve separately from saved runtime state, so saved fields should remain semantic rather than duplicating fragile tuning tables
+
+Current implementation note:
+
+- `GovernmentSaveMigrationRunner` is the current concrete migration seam
+- unsupported or malformed save payloads should fail explicitly rather than silently degrading into schema `0`
 
 ## Government Action Cost Contract
 
@@ -422,3 +488,43 @@ Important default:
 Configuration note:
 
 - cost curves, warning thresholds, and soft-block heuristics should be configuration-owned wherever practical
+
+## Example Save JSON
+
+This example illustrates the intended shape of `GovernmentSaveDataV1`.
+
+```json
+{
+  "SchemaVersion": 1,
+  "RulesetId": "democracy",
+  "UnlockLayer": 1,
+  "Approval": 50.0,
+  "Legitimacy": 60.0,
+  "PoliticalCapital": 50.0,
+  "CorruptionPressure": 5.0,
+  "ElectionCycleState": {
+    "CurrentTermIndex": 0,
+    "CurrentTermStartGameTime": 0,
+    "CurrentTermEndGameTime": 4,
+    "DefaultTermLengthYears": 4,
+    "LastElectionResult": {
+      "IncumbentWon": false,
+      "ApprovalContribution": 0.0,
+      "LegitimacyContribution": 0.0,
+      "BlocContributionSummary": {},
+      "PartyContributionSummary": {},
+      "FinalScore": 0.0,
+      "RiskWarnings": [],
+      "OutcomeReasonSummary": ""
+    }
+  },
+  "OverrideState": {
+    "IsElectionOverrideActive": false,
+    "PenaltiesDisabled": false,
+    "Reason": ""
+  },
+  "BlocScores": [],
+  "PartyStandings": [],
+  "DistrictSeedAggregates": {}
+}
+```

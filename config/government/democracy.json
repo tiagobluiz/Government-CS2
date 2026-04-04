@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "termLengthYears": 4,
+  "startingUnlockLayer": 1,
+  "startingApproval": 50.0,
+  "startingLegitimacy": 60.0,
+  "startingPoliticalCapital": 50.0,
+  "startingCorruptionPressure": 5.0,
+  "election": {
+    "approvalWeight": 0.35,
+    "blocWeight": 0.25,
+    "partyWeight": 0.25,
+    "legitimacyWeight": 0.15
+  },
+  "politicalCapital": {
+    "baseRegenerationPerTick": 4.0,
+    "lowApprovalPenaltyMultiplier": 0.75,
+    "lowLegitimacyPenaltyMultiplier": 0.75,
+    "defaultMajorActionCost": 15.0,
+    "majorActionWarningThreshold": 15.0
+  },
+  "demand": {
+    "globalCap": 15.0,
+    "confidenceWeight": 0.5,
+    "policyDirectionWeight": 0.5,
+    "residentialMultiplier": 1.0,
+    "commercialMultiplier": 1.0,
+    "industrialMultiplier": 1.0,
+    "officeMultiplier": 1.0
+  },
+  "overridePenalties": {
+    "legitimacyPenalty": 20.0,
+    "confidencePenalty": 10.0,
+    "recoveryMultiplier": 0.75
+  },
+  "unlocks": [
+    {
+      "layer": 1,
+      "cityMilestoneThreshold": 0,
+      "requiredCompletedTerms": 0
+    },
+    {
+      "layer": 2,
+      "cityMilestoneThreshold": 5,
+      "requiredCompletedTerms": 1
+    },
+    {
+      "layer": 3,
+      "cityMilestoneThreshold": 10,
+      "requiredCompletedTerms": 2
+    }
+  ],
+  "blocs": [
+    {
+      "id": "households",
+      "displayName": "Households",
+      "baseWeight": 1.0,
+      "districtSensitive": true,
+      "primaryDemandChannels": [ "residential", "commercial" ]
+    },
+    {
+      "id": "workers",
+      "displayName": "Workers",
+      "baseWeight": 1.0,
+      "districtSensitive": true,
+      "primaryDemandChannels": [ "industrial", "commercial", "residential" ]
+    },
+    {
+      "id": "business",
+      "displayName": "Business",
+      "baseWeight": 1.0,
+      "districtSensitive": true,
+      "primaryDemandChannels": [ "office", "commercial", "industrial" ]
+    },
+    {
+      "id": "students",
+      "displayName": "Students",
+      "baseWeight": 0.8,
+      "districtSensitive": true,
+      "primaryDemandChannels": [ "residential", "office" ]
+    },
+    {
+      "id": "seniors",
+      "displayName": "Seniors",
+      "baseWeight": 0.8,
+      "districtSensitive": true,
+      "primaryDemandChannels": [ "residential" ]
+    },
+    {
+      "id": "order-environment",
+      "displayName": "Order/Environment",
+      "baseWeight": 0.9,
+      "districtSensitive": true,
+      "primaryDemandChannels": [ "residential", "commercial" ]
+    }
+  ],
+  "parties": [
+    {
+      "id": "growth",
+      "displayName": "Growth",
+      "baseWeight": 1.0,
+      "affinityBlocIds": [ "business", "workers" ]
+    },
+    {
+      "id": "civic",
+      "displayName": "Civic",
+      "baseWeight": 1.0,
+      "affinityBlocIds": [ "households", "students", "seniors" ]
+    },
+    {
+      "id": "order",
+      "displayName": "Order",
+      "baseWeight": 1.0,
+      "affinityBlocIds": [ "order-environment", "seniors", "households" ]
+    }
+  ]
+}

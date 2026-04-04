@@ -16,6 +16,11 @@
 	<Import Project="$(CSIIToolPath)\Mod.targets" Condition="'$(CSIIToolPath)' != ''" />
 
 	<ItemGroup>
+		<Compile Remove="src\**\*.cs" />
+		<Compile Remove="tests\**\*.cs" />
+
+		<ProjectReference Include="src\GovernmentCS2.Core\GovernmentCS2.Core.csproj" />
+
 		<Reference Include="Game">
 			<Private>false</Private>
 		</Reference>
@@ -58,6 +63,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="config\government\**\*.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+
 		<None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
 		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
 	</ItemGroup>
